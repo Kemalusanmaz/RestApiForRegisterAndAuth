@@ -1,0 +1,43 @@
+########################Spring Security Giriş###########################################################################
+
+Bu frame work user register sistemi için sağlayan bir frameworktür.
+
+localhost:8082/login web sayfasını otomatik oluşturur.
+
+Bu sayfada default kullanıcı adı user, şifre ise sprinboot build edildiğinde logda generate edilmiş password.
+Postmanden denemek için ise Basic Auth kısmına bu bilgiler yazılır.
+
+Spring securty kulanıcı adı ve şifre belirlemek için application.properties özellik dosyasında konfigürasyon ayarı yapılır
+spring.security.user.name=kemal     kullanıcı adı belirleme
+spring.security.user.password=kemal     şifre belirleme
+spring.security.user.role=admin     role belirleme
+
+Spring Security konfigürasyonu için bir SecurityConfig paketi oluşturulur
+Http istekleri bu configürasyon sını içinden geçer ve ona göre karar verilir.
+
+#############################Spring Security Mimarisi###################################################################
+
+Authentications => Kimlik doğrulama, Giriş yapan kullanıcının bilgilerini kontrol edilen ve doğrulanan yerdir.
+
+Authoriation => Giriş yapan kullanııcnın uygulama üzerindeki erişebileceği\değiştirebileceği verileri ifade eder.
+
+Principal=> Giriş yapan kullanıcının bilgilerini ifade eder.
+
+Roles => uygulama üzerindeki izin gruplarını ifade eder.
+
+Akış
+1)  Kullanıcı http isteği gönderiri.
+2)  Uygulamaya istek geldikten sonra Authentication Filter'a girer.
+    Authentication Filter kullanıcı adı ve parolayı bir nesneye alır. Nesnenin oluştuurlmasından sorumludur.
+    Authentication Filter Security Context içinde oluşturulan nesne alınır.
+    Eğer log in olmuş bir kullanıcı ise tekrar log in isteği atmasına gerek olmadan bunu geri çevirir.
+    Eğer log in olmamışsa log in işlemine yönlendirir.
+4)  Authentication nesnesi Authentication Manager "Credential/Principal" buraya gelir.
+    Oluşan nesnenin granted authory, roles, principal bilgilerini yada doğrulandıysa credential bilgilerini nesne içersinde dolduran yerdir.
+    Bir interface'dir.
+    Kimlik doğrulam metodu çağrılır.
+5)  Çağrılan metdo AuthenticationProvider'a gönderilir. Kullanıcı bilgilerinin yer aldığı sisteme göre uygun olan provider seçilelerek. buradan kullanıcın veritabanı bilgilerine erişilmesi sağlanır.
+6)  Nesne, Erişim yapıldıktan sonra UserDetails Service geldiği zaman LoadbyUsername metodu ile hesabın kitli olup olmadığı, kimlik bilgilerinin süresinin dolup dolmadığı, hesabın aktif olup olmadığı bilgilerini barındıyor.
+    Giriş yapacak kullanıcıların detay bilgilerini barındıran servis.
+    Bu bilgileri kontrol ettikten sonra veri tabanı ya da provider'da erişmesi gereken neresiyle oradan bu bu bilgileri getirir.
+    PasswordEncoder şifrelerin şifrelendiği ve hangi tipte çözülmesi gerektiğini söyleyen ara birim bulunmaktadır.
