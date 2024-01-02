@@ -2,6 +2,7 @@ package com.tai.gky.demoKemal.Controller;
 
 import com.tai.gky.demoKemal.Configuration.SecurityConfig;
 
+import com.tai.gky.demoKemal.Dto.AuthenticateRequestDto;
 import com.tai.gky.demoKemal.Dto.RegisterRequestDto;
 import com.tai.gky.demoKemal.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ public class UserController {
 
     private final UserDetailsService userDetailsService;
     private final UserService userService;
+
+
 
 
     @GetMapping("/index")
@@ -43,11 +46,12 @@ public class UserController {
 
     }
 
-//    @GetMapping("/login")
-//    public String login(
-//            @RequestBody AuthenticateRequestDto authenticateRequestDto
-//            ){
-//        userService.loginUser(authenticateRequestDto);
-//        return "User login succesfully";
-//    }
+    @GetMapping("/login")
+    public String login(
+            @Validated
+            @RequestBody AuthenticateRequestDto authenticateRequestDto
+           ){
+        userService.authenticate(authenticateRequestDto);
+                return "User login succesfully";
+   }
 }

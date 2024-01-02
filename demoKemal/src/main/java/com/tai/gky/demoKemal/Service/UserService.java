@@ -1,18 +1,20 @@
 package com.tai.gky.demoKemal.Service;
 
 
+import com.tai.gky.demoKemal.Dto.AuthenticateRequestDto;
 import com.tai.gky.demoKemal.Dto.RegisterRequestDto;
 import com.tai.gky.demoKemal.Entity.User;
 import com.tai.gky.demoKemal.Repository.IUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Service
 public class UserService implements IUserService{
-
 
     private final IUserRepository userRepository;
 
@@ -35,6 +37,12 @@ public class UserService implements IUserService{
         userRepository.save(newUser); //Crud işlemi ile kullanıcı kayır işleminin veri tabanına kaydedilmesi için repository katmanına geçilir.
     }
 
+    @Override
+    public void authenticate(AuthenticateRequestDto authenticateRequestDto) {
+        var user = userRepository.findByUsername(authenticateRequestDto.getUsername()).
+                orElseThrow(()->new UsernameNotFoundException("User not found with username: "+ authenticateRequestDto.getUsername()) );
+
+    }
 
 
 }

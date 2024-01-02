@@ -1,22 +1,15 @@
 package com.tai.gky.demoKemal.Configuration;
 
-import com.tai.gky.demoKemal.Dto.RegisterRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
 import org.springframework.security.web.SecurityFilterChain;
 
-import java.util.ArrayList;
-import java.util.Collection;
 
 @RequiredArgsConstructor
 @Configuration //Konfigürsayon sınıfı anotasyonu
@@ -25,7 +18,7 @@ public class SecurityConfig {
 
 
 
-//########################################### Basic User Authentication ################################################
+//########################################### Basic User Regiser ################################################
 
 //    @Bean
 //    public UserDetailsService userDetailsService(){ //Kullanıcı detatlarının sağlandığı sınıf
@@ -52,14 +45,23 @@ public class SecurityConfig {
 //        return new BCryptPasswordEncoder();
 //    }
 
+
+
+//########################################### Basic User Authentication ################################################
+
     @Bean
     public SecurityFilterChain SecurityFilterChain(HttpSecurity http)throws Exception {
 
         http
-                .csrf(AbstractHttpConfigurer::disable); //Register post işlemi için autharization'ı disable eder.
+                //.csrf(AbstractHttpConfigurer::disable) //Register post işlemi için autharization'ı disable eder. CSRF korumasını devre dışı bırakır.
+                //.authorizeRequests().anyRequest().permitAll(); //authenticate isteklerinin hepsine izin verir.
+                .authorizeRequests().anyRequest().authenticated() // Tüm isteklerin kimlik doğrulama (authentication) gerektirdiğini belirtir. spring tüm endpointleri korur
+                //Bu ayar ile spring tarafından üretilen password ve user kullanıcı adı ile giriş yapılır.
+                .and()
+                .httpBasic(); // HTTP temel kimlik doğrulama kullanılacak şekilde yapılandırılır. Spring, kullanıcı adı ve şifre ile doğrulama sağlar.
 
-
-        return http.build();
+        return http.build(); // Yapılandırmayı uygula ve SecurityFilterChain bean'ini döndür.
     }
+
 
 }

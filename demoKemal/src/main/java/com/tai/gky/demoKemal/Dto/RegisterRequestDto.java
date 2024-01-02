@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 
 //Kullanıcı bilgilerini temsil eden bir model (DTO => Data Transfer Object)
 //Api üzerinden JSON isteği bu bilgilerin karşılığıdır.
-@Builder
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
