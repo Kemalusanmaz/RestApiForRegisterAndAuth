@@ -2,15 +2,22 @@ package com.tai.gky.demoKemal.Entity;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Data //Getter - Setter
 @AllArgsConstructor //Başka bir nesne üzerinden değişkenler ile çağırabilmek için
@@ -27,11 +34,23 @@ public class User implements  IUser, UserDetails {
     private String firstname;
     private String lastname;
     private String email;
+    private String roles;
+
+    private List<GrantedAuthority> authorities;
+
+    public User(User user) {
+        this.password = user.getPassword();
+        this.username = user.getUsername();
+
+        authorities = Arrays.stream(user.getRoles().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+    }
 
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -61,10 +80,6 @@ public class User implements  IUser, UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
-    } //Security oluşturmak için UserDetail implement edilir
-
-
-
-
+        return true;
+    }
 }

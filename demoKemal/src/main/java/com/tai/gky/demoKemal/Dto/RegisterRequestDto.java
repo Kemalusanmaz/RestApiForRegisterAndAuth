@@ -30,4 +30,5 @@ public class RegisterRequestDto {
     private String lastname;
     @NotEmpty(message = "Firstname cannot be empty.")
     private String firstname;
+    private String roles;
 }
