@@ -7,6 +7,6 @@ import java.util.Optional;
 @Repository
 public interface IUserRepository extends IBaseRepository<User, String> {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> findByUsername(String username); //kullanıcı adına göre sorgulama yapılır. Eğer user name sistemin içinde varsa db'den çeker.
 
 }
