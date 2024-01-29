@@ -45,15 +45,16 @@ public class User implements  IUser, UserDetails {
 //   }
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() { //user nesnesinin kullanıcılarını döndürür. Kullanıcılar user admin rolünde olabilir.
-        return List.of(new SimpleGrantedAuthority(role.name())); //Liste içinde bu roller döndürülür.
-    }
-
 //    @Override
 //    public Collection<? extends GrantedAuthority> getAuthorities() { //user nesnesinin kullanıcılarını döndürür. Kullanıcılar user admin rolünde olabilir.
-//        return authorities;
+//        return List.of(new SimpleGrantedAuthority(role.name())); //Liste içinde bu roller döndürülür.
 //    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() { //user nesnesinin kullanıcılarını döndürür. Kullanıcılar user admin rolünde olabilir.
+       return Arrays.stream(role.name().split(","))
+              .map(SimpleGrantedAuthority::new)
+               .collect(Collectors.toList());
+    }
     @Override
     public String getPassword() {
         return password;

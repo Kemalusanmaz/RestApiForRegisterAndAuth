@@ -79,24 +79,19 @@ public class UserService {
 //
 //        var token = jwtService.generateToken(user); // kullnıcı kaydedildikten sonra generateToken kullanıcı bilgileriyle oluşturulur.
 
-        User admin = User.builder()
+        User user = User.builder()
                 .username(registerRequestDto.getUsername())
                 .password(passwordEncoder.encode(registerRequestDto.getPassword()))
-                .role(Role.ADMIN)
+                //.role(Role.USER)
+                .role(registerRequestDto.getRole())
                 .firstname(registerRequestDto.getFirstname())
                 .lastname(registerRequestDto.getLastname())
                 .email(registerRequestDto.getEmail())
                 .build();
 
-        userRepository.save(admin);
+        userRepository.save(user);
 
-        User admin2 = User.builder()
-                .username(registerRequestDto.getUsername())
-                .password(registerRequestDto.getPassword())
-                .role(Role.USER)
-                .build();
-
-        var token = jwtService.generateToken(admin2);
+        var token = jwtService.generateToken(user);
 
 
         return RegisterResponseDto.builder().token(token).build(); //register işlemi yapıldıktan sonra token üretilir.
